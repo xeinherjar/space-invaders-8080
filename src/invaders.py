@@ -1,10 +1,13 @@
 import cpu
 import mem
 
-motherboard = { }
-motherboard['cpu'] = cpu.CPU(motherboard)
-motherboard['ram'] = mem.MEM(motherboard)
+class Motherboard:
+    def __init__(self):
+        self.cpu = cpu.CPU(self)
+        self.ram = mem.MEM(self)
 
-motherboard['ram'].load('../roms/invaders.rom')
 
-motherboard['cpu'].run()
+motherboard = Motherboard()
+
+motherboard.ram.load('../roms/invaders.rom')
+motherboard.cpu.run()

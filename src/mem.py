@@ -14,11 +14,11 @@ class MEM:
         self.ram = [0] * 0x4000
         self.mirror = 0x4000
 
-    def write(self, idx, value):
-        self.ram[idx % self.mirror] = value & 0xFF
+    def write(self, address, value):
+        self.ram[address % self.mirror] = value & 0xFF
 
-    def read(self, idx):
-        return self.ram[idx % self.mirror]
+    def read(self, address):
+        return self.ram[address % self.mirror]
 
     def load(self, rom_path):
         with open(rom_path, 'rb') as f:

@@ -1,3 +1,4 @@
 *.rom
 *.ROM
+*.pyc
 /roms
