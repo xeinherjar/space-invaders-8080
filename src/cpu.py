@@ -110,19 +110,16 @@ class CPU:
     def get_flags(self):
         return Flags(self.registers.AF & 0xF)
 
-    def set_flags(self, value, *args, old_value=None):
+    def set_flags(self, value, *args, left_value=None, right_value=None):
         """ *args flags to test and set for """
         flag = 0b00000010
-        print('ARGS', *args)
         for arg in args:
             if arg == Flags.S and Flags.S in Flags(value):
                 flag = flag | Flags.S
             elif arg == Flags.Z and value == 0:
                 flag = flag | Flags.Z
             elif arg == Flags.AC:
-                old_bit = (old_value >> 3) & 1
-                new_bit = (value >> 4) & 1
-                if old_bit == new_bit and old_bit == 1:
+                if (left_value & 0xf) + (right_value & 0xf) > 0xf
                     flag = flag | Flags.AC
             elif arg == Flags.P:
                 mask = 0b10000000
@@ -210,7 +207,7 @@ class CPU:
         else:
             raise ValueError('INR: something is wrong', idx)
         
-        self.set_flags(dec, Flags.Z, Flags.S, Flags.P, Flags.AC, old_value=dec + 1)
+        self.set_flags(dec, Flags.Z, Flags.S, Flags.P, Flags.AC, left_value=dec + 1, right_value=1)
         self.cycles += 5
 
     def inr(self):
@@ -255,7 +252,7 @@ class CPU:
         else:
             raise ValueError('INR: something is wrong', idx)
         
-        self.set_flags(inc, Flags.Z, Flags.S, Flags.P, Flags.AC, old_value=inc - 1)
+        self.set_flags(inc, Flags.Z, Flags.S, Flags.P, Flags.AC, left_value=inc - 1, right_value=1)
         self.cycles += 5
     
     def inx(self):
